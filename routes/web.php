@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Restaurant;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -18,6 +20,8 @@ use Inertia\Inertia;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/restaurant/{restaurant}', [RestaurantController::class, 'show'])->name('restaurant');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
