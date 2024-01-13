@@ -7,6 +7,8 @@ use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class CartController extends Controller
 {
@@ -57,5 +59,24 @@ class CartController extends Controller
         $items = collect(session('cart.items'));
 
         session()->put('cart.total', $items->sum('price'));
+    }
+
+    public function index(): Response
+    {
+        return Inertia::render('Customer/Cart');
+    }
+
+    public function remove(string $uuid)
+    {
+        $items = collect(session('cart.items'))
+            ->reject(function ($items) use ($uuid) {
+                return $items['uuid'] == $uuid;
+            });
+
+        session(['cart.items' => $items->values()->toArray()]);
+
+        $this->updateTotal();
+
+        return back();
     }
 }
